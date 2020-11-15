@@ -8,6 +8,8 @@
 
 1. (root 계정 비활성화일 때) 'sudo passwd root' 를 입력하고 비밀번호를 설정합니다.
 
-2. 터미널에서 apt-get install libncurses5-dev libncursesw5-dev 를 입력해 관련 라이브러리를 설치합니다.
+2. 터미널에 'su - root'를 입력하고 root 계정으로 로그인합니다. 
 
-3. 빌드할 때, -lncurses 옵션을 붙여야 합니다.
+3. 터미널에 apt-get install libncurses5-dev libncursesw5-dev 를 입력해 관련 라이브러리를 설치합니다.
+
+4. 빌드할 때, -lncurses 옵션을 붙여야 합니다.
