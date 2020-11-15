@@ -3,7 +3,11 @@
 
 # description
 본 프로젝트에서는 ncurses 라이브러리를 사용합니다.
-'fatal error: ncurses.h: No such file or directory' 오류가 뜬다면
-터미널에서 apt-get install libncurses5-dev libncursesw5-dev 를 입력해 설치합니다.
 
-빌드할 때, -lncurses 옵션을 붙여야 합니다.
+'fatal error: ncurses.h: No such file or directory' 오류가 뜬다면
+
+1. (root 계정 비활성화일 때) 'sudo passwd root' 를 입력하고 비밀번호를 설정합니다.
+
+2. 터미널에서 apt-get install libncurses5-dev libncursesw5-dev 를 입력해 관련 라이브러리를 설치합니다.
+
+3. 빌드할 때, -lncurses 옵션을 붙여야 합니다.
