@@ -1,7 +1,7 @@
 /*
  * 자료구조실습 9조 팀프로젝트
  */
-
+#include "TypingPracticeGame.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -11,13 +11,13 @@
 #define ENTER 10
 #define ESCAPE 27
 
-void InitCurses();       // curses 기초 설정
-void Title();            // 타이틀 출력 함수
-void TypingPracticeUI(); // 긴글연습 UI 출력 함수
-void TypingPractice();   // 긴글연습 구현 함수
-void WordChainUI();      // 끝말잇기 UI 출력 함수
-void WordChainGame();    // 끝말잇기 구현 함수
-void Information();      // 정보 출력 함수
+void InitCurses(); // curses 기초 설정
+void Title();      // 타이틀 출력 함수
+// void TypingPracticeUI(); // 긴글연습 UI 출력 함수
+// void TypingPractice();   // 긴글연습 구현 함수
+void WordChainUI();   // 끝말잇기 UI 출력 함수
+void WordChainGame(); // 끝말잇기 구현 함수
+void Information();   // 정보 출력 함수
 
 int flag = 0; // 0: 타이틀, 1: 긴글연습, 2: 끝말잇기, 3: Information
 
@@ -75,7 +75,7 @@ void Title() {
             case ENTER: // 엔터키
                 if (i == 0) {
                     flag = 1;
-                    TypingPracticeUI();
+                    TypingGame();
                 } else if (i == 1) {
                     flag = 2;
                     WordChainUI();
@@ -94,8 +94,10 @@ void Title() {
     }
 }
 
+/*
 void TypingPracticeUI() {}
 void TypingPractice() {}
+*/
 void WordChainUI() {
     WINDOW *wwc;
     initscr();
