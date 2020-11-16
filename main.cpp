@@ -8,14 +8,28 @@
 #include <ncurses.h>
 #include <string>
 
-void title();
-void TypingPracticeUI();
-void TypingPractice();
-void WordChainUI();
-void WordChainGame();
-void Information();
+#define ENTER 10
+#define ESCAPE 27
 
-void title() {
+void InitCurses();       // curses 기초 설정
+void Title();            // 타이틀 출력 함수
+void TypingPracticeUI(); // 긴글연습 UI 출력 함수
+void TypingPractice();   // 긴글연습 구현 함수
+void WordChainUI();      // 끝말잇기 UI 출력 함수
+void WordChainGame();    // 끝말잇기 구현 함수
+void Information();      // 정보 출력 함수
+
+int flag = 0; // 0: 타이틀, 1: 긴글연습, 2: 끝말잇기, 3: Information
+
+void InitCurses() {
+    initscr();
+    start_color();
+    init_pair(1, COLOR_WHITE, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_WHITE);
+    init_pair(3, COLOR_BLUE, COLOR_BLACK);
+}
+
+void Title() {
     WINDOW *w;
     char list[3][20] = {"Typing Practice", "Word Chain Game", "Information"};
     char item[20];
@@ -31,9 +45,9 @@ void title() {
 
     for (i = 0; i < 3; i++) {
         if (i == 0)
-            wattron(w, A_STANDOUT); // Highlight the line
+            wattron(w, COLOR_PAIR(2)); // Highlight the line
         else
-            wattroff(w, A_STANDOUT);
+            wattroff(w, COLOR_PAIR(2));
         sprintf(item, "%-7s", list[i]);
         mvwprintw(w, i + 10, 2, "%s", item);
     }
@@ -45,40 +59,67 @@ void title() {
     keypad(w, TRUE);
     curs_set(0);
 
-    while ((ch = wgetch(w)) != 'q') {
-        sprintf(item, "%-7s", list[i]);
-        mvwprintw(w, i + 10, 2, "%s", item);
-        switch (ch) {
-        case KEY_UP:
-            i--;
-            i = (i < 0) ? 2 : i;
-            break;
-        case KEY_DOWN:
-            i++;
-            i = (i > 2) ? 0 : i;
-            break;
-        case KEY_ENTER:
-            if (i == 0)
-                TypingPracticeUI();
-            else if (i == 1)
-                WordChainUI();
-            else
-                Information();
-        }
-        wattron(w, A_STANDOUT);
+    while (flag == 0) {
+        while ((ch = wgetch(w)) != ESCAPE) { // 'esc'키로 종료
+            sprintf(item, "%-7s", list[i]);
+            mvwprintw(w, i + 10, 2, "%s", item);
+            switch (ch) {
+            case KEY_UP: // 위 방향키
+                i--;
+                i = (i < 0) ? 2 : i;
+                break;
+            case KEY_DOWN: // 아래 방향키
+                i++;
+                i = (i > 2) ? 0 : i;
+                break;
+            case ENTER: // 엔터키
+                if (i == 0) {
+                    flag = 1;
+                    TypingPracticeUI();
+                } else if (i == 1) {
+                    flag = 2;
+                    WordChainUI();
+                } else
+                    Information();
+            }
+            wattron(w, COLOR_PAIR(2));
 
-        sprintf(item, "%-7s", list[i]);
-        mvwprintw(w, i + 10, 2, "%s", item);
-        wattroff(w, A_STANDOUT);
+            sprintf(item, "%-7s", list[i]);
+            mvwprintw(w, i + 10, 2, "%s", item);
+            wattroff(w, COLOR_PAIR(2));
+        }
+        delwin(w);
+        endwin();
+        return;
     }
-    delwin(w);
-    endwin();
 }
 
 void TypingPracticeUI() {}
 void TypingPractice() {}
-void WordChainUI() {}
+void WordChainUI() {
+    WINDOW *wwc;
+    initscr();
+    wwc = newwin(22, 50, 1, 1);
+    touchwin(wwc);
+    wborder(wwc, '*', '*', '*', '*', '*', '*', '*', '*');
+    /*mvwprintw(wwc, 0, 0, "■■■■■■■■■■■■■■■■■■■■■■■■■");
+    for (int i = 1; i <= 20; i++) {
+        if (i == 15)
+            mvwprintw(wwc, i, 1, "■■■■■■■■■■■■■■■■■■■■■■■■■");
+        else
+            mvwprintw(wwc, i, 0,
+                      "■                                              ■");
+    }*/
+    mvwprintw(wwc, 2, 1, "**************************************************");
+    mvwprintw(wwc, 17, 1, "**************************************************");
+    mvwprintw(wwc, 1, 17, "<Word Chain Game>");
+    wrefresh(wwc);
+    WordChainGame();
+}
 void WordChainGame() {}
 void Information() {}
 
-int main() { title(); }
+int main() {
+    InitCurses();
+    Title();
+}
