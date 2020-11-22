@@ -31,7 +31,8 @@ void longprac_game() {
     int cut_count_col;
     int index = 0;
 
-    system("clear");
+    clear();
+    refresh();
     longbackground();
     subbackground();
 
@@ -70,33 +71,44 @@ void longprac_game() {
 
         if ((i + 1) % 5 == 0) {
             ypoint = 10;
-            move_cursor(xpoint, ypoint);
+            move(ypoint - 1, xpoint - 1);
+            refresh();
 
             while (1) {
                 write_char = getchar();
                 write_text[write_count] = write_char;
+                cout << write_text[write_count];
                 write_count++;
-                if (write_char == '\n') {
+                if (write_char == '\r' || write_count > 166) {
                     index--;
                     ypoint += 8;
                     write_count = 0;
                     memset(&write_text, '\0', TEXT_SIZE);
                     if (ypoint > 44) { // 다음 페이지로
-                        system("clear");
+                        clear();
+                        refresh();
                         longbackground();
                         subbackground();
                         break;
                     }
                     if (index <= 0) {
-                        system("clear");
+                        clear();
+                        refresh();
                         longbackground();
                     }
                     move_cursor(xpoint, ypoint);
-                }
-                if (write_char == DEL || write_char == BS) {
+                } else if (write_char == DEL || write_char == BS) {
                     write_count--;
                     write_text[write_count] = '\0';
+                    if (write_count == 0) {
+                        continue;
+                    }
+                    move_cursor(xpoint + write_count - 1, ypoint);
+                    cout << " ";
+                    move_cursor(xpoint + write_count - 1, ypoint);
+                    write_count--;
                 }
+                // 틀렸을 때 색 표시 추가
             }
             ypoint = 6;
         }
