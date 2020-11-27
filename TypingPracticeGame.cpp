@@ -4,22 +4,23 @@
 
 void TypingGame() {
     WINDOW *typingWindow;
-    char list[3][20] = {"1. aaa", "2. bbb", "3. ccc"};
-    // 파일 이름 적기 추가 수정 필요
-    char item[20];
-
+    char list[5][30] = {"1. Beauty and the beast", "2. Gulliver's Travels",
+                        "3. Rapunzel", "4. The little prince",
+                        "5. The wind and the sun"};
+    char item[30];
+    string path;
     initscr();
     clear();
     refresh();
 
-    typingWindow = newwin(40, 40, 0, 0);
+    typingWindow = newwin(20, 40, 0, 0);
     touchwin(typingWindow);
     box(typingWindow, 0, 0);
     mvwprintw(typingWindow, 1, 8, "< Typing Practice Game >");
     wrefresh(typingWindow);
 
     int i = 0;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 5; i++) {
         if (i == 0)
             wattron(typingWindow, COLOR_PAIR(4));
         else
@@ -42,15 +43,24 @@ void TypingGame() {
         switch (ch) {
         case KEY_UP: // 위 방향키
             i--;
-            i = (i < 0) ? 2 : i;
+            i = (i < 0) ? 4 : i;
             break;
         case KEY_DOWN: // 아래 방향키
             i++;
-            i = (i > 2) ? 0 : i;
+            i = (i > 4) ? 0 : i;
             break;
         case ENTER: // 엔터키
-            longprac_game();
-            // 파일 별로 다르게 열리도록 수정해야함
+            if (i == 0)
+                path = "./longtext/BeautyAndTheBeast.txt";
+            else if (i == 1)
+                path = "./longtext/Gulliver's Travels.txt";
+            else if (i == 2)
+                path = "./longtext/Rapunzel.txt";
+            else if (i == 3)
+                path = "./longtext/The Little Prince.txt";
+            else
+                path = "./longtext/The Wind and the Sun.txt";
+            longprac_game(path);
         }
         wattron(typingWindow, COLOR_PAIR(4));
 
