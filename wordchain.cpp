@@ -1,14 +1,4 @@
-#include <cstdlib>
-#include <fcntl.h>
-#include <fstream>
-#include <iostream>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <string>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#include "WordGame.hpp"
 #include <vector>
 
 #define PERMS 0644
@@ -49,103 +39,195 @@ using namespace std;
     return 0;
 }*/
 
-int main() {
-    int array_size = 1024;
-    char line[200];
-    int position = 0;
-    vector<string> words;
+WordGame::WordGame() {
+    loadWords();
+    usedCount = 0;
+    lifeCount = 0;
 
-    ifstream fin; // words에 사전 텍스트 파일 저장
+    srand(time(NULL));
+    int random = rand() % 10000;
+    before = words.at(random); // 컴퓨터 시작 단어 결정
+    used.push_back(before);
+}
+
+WordGame::~WordGame() {
+    usedCount = 0;
+    lifeCount = 0;
+}
+
+void WordGame::playGame() {
+    cout << "Game Start!" << endl;
+    cout << "컴퓨터: " << before << endl;
+
+    while (lifeCount != 2) {
+        cout << "플레이어: ";
+        cin >> later;
+        if (checkWords(later)) {
+            before = later;
+            usedCount++;
+            used.push_back(later);
+
+            comWords();
+            continue;
+        } else {
+            lifeCount++;
+            cout << lifeCount << "회 실패! 2회 실패 시 게임 오버" << endl;
+            continue;
+        }
+    }
+
+    cout << "Game Over!!" << endl;
+    return;
+}
+
+void WordGame::loadWords() {
+    int array_size = 1024;
+    char line[100];
+
+    ifstream fin;
     fin.open("merged.txt");
     if (fin.is_open()) {
         while (fin.getline(line, sizeof(line))) {
-            words[position] = line;
-            position++;
+            words.push_back(line);
         }
     }
-    srand(time(NULL));
-    int random = rand() % 40;
-    cout << "컴퓨터 단어 : " << words[random] << endl;
-    string text = words[random];
-    string endcomword = text.substr(text.length() - 1, text.length());
-    fin.close();
-
-    char userword[100];
-    char line1[100];
-    char line2[100];
-    char buf[200];
-    /*FILE *fp;
-    fp = fopen("merged.txt", "r");*/
-    vector<string>::iterator iter;
-
-    string firstuserword;
-    char enduserword;
-
-    while (true) {
-        int num1 = 0;
-        int num2 = 0;
-
-        cout << "단어입력 : "; //사용자 단어 입력
-        cin >> userword;
-        firstuserword = userword[0];
-        if (firstuserword ==
-            endcomword) //사용자 단어 입력성공시 사전파일에 있는 단어인지 확인
-        {
-            /*while (!feof(fp)) {
-                num1++;
-                fgets(line1, 100, fp);
-                if (strstr(line1, userword) != NULL)
-                {
-                    cout << "성공" << endl;
-                    break;
-                }
-            }*/
-            for (iter = words.begin(); iter != words.end();
-                 iter++) { //사용자 단어 입력성공시 사전파일에 있는 단어인지
-                           //확인
-                if (userword == words[num1]) {
-                    cout << "성공" << endl;
-                    break;
-                }
-                num1++;
-            }
-
-            enduserword = userword[strlen(userword) - 1];
-            /*while (!feof(fp)) { //컴퓨터 사전에서 찾기
-                num2++;
-                fgets(line2, 100, fp);
-                if (line2[0] == enduserword ) {
-                    cout << "컴퓨터 : " << line2 << endl;
-                    endcomword = line2[strlen(line2) - 1, strlen(line2)];
-
-
-                    break;
-                }
-            }*/
-            for (iter = words.begin(); iter != words.end(); iter++) {
-                if (words[num2].at(0) == enduserword) {
-                    cout << "컴퓨터 : " << words[num2] << endl;
-
-                    endcomword = words[num2].back(); //왜오류지
-                    num2++;
-                    words.erase(words.begin() + num2 - 1);
-                    break;
-                }
-            }
-            ofstream newdata("newdata.txt");
-            for (int i = 0; i < words.size(); i++) {
-                newdata << words[i] << endl;
-            }
-            newdata.close();
-            remove("merged.txt");
-            rename("newdata.txt", "merged.txt");
-        } else {
-            cout << "실패" << endl;
-        }
-    }
-    // fclose(fp);
-    return 0;
 }
+
+bool WordGame::checkWords(string str) {
+    if (before.at(before.length() - 1) == str.at(0)) {
+        for (iter = words.begin(); iter != words.end(); iter++) {
+            if (str == *iter) {
+                for (iter2 = used.begin(); iter2 != used.end(); iter2++) {
+                    if (str == *iter2)
+                        return false; // 이미 사용함
+                }
+                return true; // 사전에 있고, 중복이 아니며 첫 글자 일치
+            }
+            return false; // 사전에 존재하지 않음
+        }
+    } else {
+        return false; // 첫 글자 불일치
+    }
+}
+
+void WordGame::comWords() {
+    srand(time(NULL));
+    int random = rand() % 10000;
+    string temp = words[random];
+    if (checkWords(temp))
+        before = words[random];
+
+    cout << "컴퓨터: " << before << endl;
+}
+
+int main() {
+    cout << "3초 후 게임을 시작합니다." << endl;
+    sleep(3);
+    WordGame game;
+    game.playGame();
+}
+
+// int main() {
+//     int array_size = 1024;
+//     char line[200];
+//     int position = 0;
+//     vector<string> words; // 단어 저장 사전
+//     vector<string> used;  // 사용한 단어 저장
+
+//     ifstream fin; // words에 사전 텍스트 파일 저장
+//     fin.open("merged.txt");
+//     if (fin.is_open()) {
+//         while (fin.getline(line, sizeof(line))) {
+//             words.push_back(line);
+//         }
+//     }
+//     srand(time(NULL));
+//     int random = rand() % 40;
+//     std::cout << "컴퓨터 단어 : " << words[random] << endl;
+//     string text = words[random];
+//     string endcomword = text.substr(text.length() - 1, 1);
+//     fin.close();
+
+//     string userword;
+//     char line1[100];
+//     char line2[100];
+//     char buf[200];
+//     /*FILE *fp;
+//     fp = fopen("merged.txt", "r");*/
+//     vector<string>::iterator iter;
+
+//     string firstuserword;
+//     string enduserword;
+//     int gameover = 0; // 3번 연속 실패하면 게임 오버
+//     int num1 = 0;
+//     int num2 = 0;
+
+//     while (gameover != 3) {
+
+//         std::cout << "단어입력 : "; //사용자 단어 입력
+//         cin >> userword;
+//         firstuserword = userword.at(0);
+//         if (firstuserword ==
+//             endcomword) //사용자 단어 입력성공시 사전파일에 있는 단어인지
+//             확인
+//         {
+//             /*while (!feof(fp)) {
+//                 num1++;
+//                 fgets(line1, 100, fp);
+//                 if (strstr(line1, userword) != NULL)
+//                 {
+//                     cout << "성공" << endl;
+//                     break;
+//                 }
+//             }*/
+//             for (iter = words.begin(); iter != words.end();
+//                  iter++) { //사용자 단어 입력성공시 사전파일에 있는 단어인지
+//                            //확인
+//                 if (userword == *iter) {
+//                     std::cout << "성공" << endl;
+//                     break;
+//                 }
+//                 num1++;
+//             }
+
+//             enduserword = userword[userword.length() - 1];
+//             /*while (!feof(fp)) { //컴퓨터 사전에서 찾기
+//                 num2++;
+//                 fgets(line2, 100, fp);
+//                 if (line2[0] == enduserword ) {
+//                     cout << "컴퓨터 : " << line2 << endl;
+//                     endcomword = line2[strlen(line2) - 1, strlen(line2)];
+
+//                     break;
+//                 }
+//             }*/
+//             for (iter = words.begin(); iter != words.end(); iter++) {
+//                 if (words[num2].at(0) == enduserword) {
+//                     std::cout << "컴퓨터 : " << words[num2] << endl;
+
+//                     endcomword = words[num2].back(); //왜오류지
+//                     num2++;
+//                     words.erase(words.begin() + num2 - 1);
+//                     break;
+//                 }
+//             }
+//             /*
+//             ofstream newdata("newdata.txt");
+//             for (int i = 0; i < words.size(); i++) {
+//                 newdata << words[i] << endl;
+//             }
+//             newdata.close();
+//             remove("merged.txt");
+//             rename("newdata.txt", "merged.txt");*/
+//         } else {
+//             std::cout << "실패" << endl;
+//             gameover++;
+//         }
+//     }
+//     // fclose(fp);
+//     std::cout << "게임 오버!" << endl;
+//     return 0;
+// }
 
 /*int fd = 0;
 char *pathname = "./merged.txt";
