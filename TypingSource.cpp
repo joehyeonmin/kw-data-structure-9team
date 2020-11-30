@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <ctime>
 
 #define TEXT_SIZE 5000 // fseek랑 ftell로 파일 사이즈 알 수 있을 거 같은데
 #define DEL 127
@@ -28,7 +29,9 @@ void longprac_game(string pathname) {
     int cut_count_row;
     int cut_count_col;
     int index = 0;
-
+    int totalText = 0; // 총 글자수
+    int wrong = 0; // 오타 갯수
+    
     clear();
     refresh();
     longbackground();
@@ -53,13 +56,14 @@ void longprac_game(string pathname) {
          ++iter_read) {
         cut_text[cut_count_row][cut_count_col] = *iter_read;
         cut_count_col++;
-
+        totalText++;
         if (*iter_read == '\n') {
             cut_count_row++;
             cut_count_col = 0;
         }
     }
     index = cut_count_row;
+    clock_t start = clock(); // start Time
     for (int i = 0; i <= cut_count_row; i++) {
         move_cursor(xpoint, ypoint);
         ypoint += 8;
@@ -100,6 +104,7 @@ void longprac_game(string pathname) {
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
                     write_count--;
+                    wrong--;
                     write_text[write_count] = '\0';
                     if (write_count == 0) {
                         continue;
@@ -110,6 +115,7 @@ void longprac_game(string pathname) {
                     write_count--;
                 } else if (write_char !=
                            cut_text[cut_count_row - index][write_count - 1]) {
+                    wrong++; // 오타 갯수
                     move_cursor(xpoint + write_count - 1, ypoint - 4);
                     printf("%c[31m", 27); // 빨간색
                     printf("%c[40m", 27);
@@ -164,6 +170,7 @@ void longprac_game(string pathname) {
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
                     write_count--;
+                    wrong--;
                     write_text[write_count] = '\0';
                     if (write_count == 0) {
                         continue;
@@ -174,6 +181,7 @@ void longprac_game(string pathname) {
                     write_count--;
                 } else if (write_char !=
                            cut_text[cut_count_row - index][write_count - 1]) {
+                    wrong++; // 오타 갯수
                     move_cursor(xpoint + write_count - 1, ypoint - 4);
                     printf("%c[31m", 27); // 빨간색
                     printf("%c[40m", 27);
@@ -190,6 +198,20 @@ void longprac_game(string pathname) {
         }
     }
 
+    
+    clock_t end = clock();
+    float totalTime = (float)(end-start)/CLOCKS_PER_SEC;
+    float accuracy = (float)(totalText - wrong)/totalText;
+    float typingSpeed = (float)totalText/totalTime;
+    
+    move_cursor(50, 15);
+    cout << "평균 타수 : " << typingSpeed << endl;
+    cout << "틀린 글자 개수 : " << wrong << endl;
+    cout << "걸린 초 : " << totalTime << endl;
+    cout << "\n정확도 : " << accuracy << endl;
+    getchar(); // 아무 버튼이나 누르면 종료
+    
+    
     move_cursor(0, 46);
     close(fd);
 }
