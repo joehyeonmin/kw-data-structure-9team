@@ -1,13 +1,13 @@
 #include "TypingPracticeGame.hpp"
 #include <array>
 #include <cstdio>
+#include <ctime>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <ctime>
 
-#define TEXT_SIZE 5000 // fseek랑 ftell로 파일 사이즈 알 수 있을 거 같은데
+#define TEXT_SIZE 5000
 #define DEL 127
 #define BS 8
 
@@ -30,8 +30,8 @@ void longprac_game(string pathname) {
     int cut_count_col;
     int index = 0;
     int totalText = 0; // 총 글자수
-    int wrong = 0; // 오타 갯수
-    
+    int wrong = 0;     // 오타 갯수
+
     clear();
     refresh();
     longbackground();
@@ -88,18 +88,30 @@ void longprac_game(string pathname) {
                     ypoint += 8;
                     write_count = 0;
                     memset(&write_text, '\0', TEXT_SIZE);
-                    if (ypoint > 44) { // 다음 페이지로
+                    if (index <= 0) {
+                        clear();
+                        refresh();
+                        longbackground();
+                        close(fd);
+                        clock_t end = clock();
+                        float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
+                        float accuracy = (float)(totalText - wrong) / totalText;
+                        float typingSpeed = (float)totalText / totalTime;
+
+                        move_cursor(50, 15);
+                        cout << "평균 타수 : " << typingSpeed << endl;
+                        cout << "틀린 글자 개수 : " << wrong << endl;
+                        cout << "걸린 초 : " << totalTime << endl;
+                        cout << "\n정확도 : " << accuracy << endl;
+                        getchar(); // 아무 버튼이나 누르면 종료
+                        return;
+                    } else if (ypoint > 44) { // 다음 페이지로
                         ypoint = 6;
                         clear();
                         refresh();
                         longbackground();
                         subbackground();
                         break;
-                    }
-                    if (index <= 0) {
-                        clear();
-                        refresh();
-                        longbackground();
                     }
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
@@ -166,6 +178,19 @@ void longprac_game(string pathname) {
                         clear();
                         refresh();
                         longbackground();
+                        close(fd);
+                        clock_t end = clock();
+                        float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
+                        float accuracy = (float)(totalText - wrong) / totalText;
+                        float typingSpeed = (float)totalText / totalTime;
+
+                        move_cursor(50, 15);
+                        cout << "평균 타수 : " << typingSpeed << endl;
+                        cout << "틀린 글자 개수 : " << wrong << endl;
+                        cout << "걸린 초 : " << totalTime << endl;
+                        cout << "\n정확도 : " << accuracy << endl;
+                        getchar(); // 아무 버튼이나 누르면 종료
+                        return;
                     }
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
@@ -198,20 +223,18 @@ void longprac_game(string pathname) {
         }
     }
 
-    
-    clock_t end = clock();
-    float totalTime = (float)(end-start)/CLOCKS_PER_SEC;
-    float accuracy = (float)(totalText - wrong)/totalText;
-    float typingSpeed = (float)totalText/totalTime;
-    
-    move_cursor(50, 15);
-    cout << "평균 타수 : " << typingSpeed << endl;
-    cout << "틀린 글자 개수 : " << wrong << endl;
-    cout << "걸린 초 : " << totalTime << endl;
-    cout << "\n정확도 : " << accuracy << endl;
-    getchar(); // 아무 버튼이나 누르면 종료
-    
-    
-    move_cursor(0, 46);
-    close(fd);
+    /*
+        clock_t end = clock();
+        float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
+        float accuracy = (float)(totalText - wrong) / totalText;
+        float typingSpeed = (float)totalText / totalTime;
+
+        move_cursor(50, 15);
+        cout << "평균 타수 : " << typingSpeed << endl;
+        cout << "틀린 글자 개수 : " << wrong << endl;
+        cout << "걸린 초 : " << totalTime << endl;
+        cout << "\n정확도 : " << accuracy << endl;
+        getchar(); // 아무 버튼이나 누르면 종료
+    */
+    // close(fd);
 }

@@ -73,6 +73,7 @@ void Title() {
                 if (i == 0) {
                     flag = 1;
                     TypingGame();
+                    return;
                 } else if (i == 1) {
                     flag = 2;
                     WordChainUI();

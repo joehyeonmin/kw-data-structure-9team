@@ -63,6 +63,9 @@ void TypingGame() {
             else
                 path = "./longtext/The Wind and the Sun.txt";
             longprac_game(path);
+            delwin(typingWindow);
+            endwin();
+            return;
         }
         wattron(typingWindow, COLOR_PAIR(4));
 
@@ -70,19 +73,18 @@ void TypingGame() {
         mvwprintw(typingWindow, i + 10, 2, "%s", item);
         wattroff(typingWindow, COLOR_PAIR(4));
     }
+    /*
     delwin(typingWindow);
     endwin();
     return;
+    */
 }
-
-
-
 
 // char*  trim(char *s); // 문자열 좌우 공백 모두 삭제 함수
 // char* ltrim(char *s); // 문자열 좌측 공백 제거 함수
 // char* rtrim(char* s); // 문자열 우측 공백 제거 함수
 
-// int row = 1; 
+// int row = 1;
 // int col = 3;
 
 // int total = 0;
@@ -96,7 +98,7 @@ void TypingGame() {
 //     char* line = NULL;
 //     string text;
 //     string cmptext;
- 
+
 //     size_t len = 0;
 //     ssize_t read;
 //     int result = 0;
@@ -110,7 +112,7 @@ void TypingGame() {
 //     int page = 0;
 //     clock_t start = clock();
 //     while ( (read = getline(&line, &len, fp)) != -1 ) // 한줄씩 읽어온다
-//     {        
+//     {
 //         char str[180];
 //         line = trim(line);
 //         text =line;
@@ -149,7 +151,7 @@ void TypingGame() {
 //         if(W < 0)
 //             W = -W;
 //         total += W;
-        
+
 //         row += 2;
 //         page++;
 //         if(page >= PageOfLine){
@@ -158,11 +160,11 @@ void TypingGame() {
 //             box(lw,0,0);
 //             row = 1;
 //             col = 1;
-//         }   
+//         }
 //     }
 
 //     clock_t end = clock();
-    
+
 //     wclear(lw);
 //     box(lw,0,0);
 //     row = 1;
@@ -178,7 +180,7 @@ void TypingGame() {
 //     float res4 = (float)(total - wrong)/total;
 //     float res1 = (float)total/res3;
 
-//     string Result = str1 + to_string(res1) + str2 + to_string(res2) 
+//     string Result = str1 + to_string(res1) + str2 + to_string(res2)
 //         + str3 + to_string(res3) + str4 + to_string(res4);
 
 //     const char* cResult = Result.c_str();
@@ -186,12 +188,10 @@ void TypingGame() {
 //         cResult
 //     );
 //     wrefresh(lw);
-    
 
 //     //endwin();
 //     return;
 // }
-
 
 // // 문자열 우측 공백문자 삭제 함수
 // char* rtrim(char* s) {
@@ -211,7 +211,6 @@ void TypingGame() {
 //   return s;
 // }
 
-
 // // 문자열 좌측 공백문자 삭제 함수
 // char* ltrim(char *s) {
 //   char* begin;
@@ -229,9 +228,7 @@ void TypingGame() {
 //   return s;
 // }
 
-
 // // 문자열 앞뒤 공백 모두 삭제 함수
 // char* trim(char *s) {
 //   return rtrim(ltrim(s));
 // }
-
