@@ -38,7 +38,7 @@ void WordGame::playGame() {
             usedCount++;
             used.push_back(later);
 
-            comWords();
+            before = comWords(later);
             continue;
         } else {
             lifeCount++;
@@ -65,23 +65,8 @@ void WordGame::loadWords() {
 }
 
 bool WordGame::checkWords(string str) {
-
-    // int i = before.size();
-    /*const wchar_t *str1;
-    const wchar_t *str2;
-    wstring str3;
-    wstring str4;
-
-    str3.assign(str.begin(), str.end());
-    str4.assign(before.begin(), before.end());
-
-    str1 = str3.c_str();
-    str2 = str4.c_str();*/
-
     const char *str1 = str.c_str();
     const char *str2 = before.c_str();
-
-    // before.at(i - 1) == str.at(0) && before.at(i - 2) == str.at(1)
 
     char temp1[3] = {
         0x00,
@@ -96,40 +81,31 @@ bool WordGame::checkWords(string str) {
 
     if (strcmp(temp1, temp2) == 0) {
         for (iter = words.begin(); iter != words.end(); iter++) {
+
             if (str == *iter) {
                 for (iter2 = used.begin(); iter2 != used.end(); iter2++) {
                     if (str == *iter2) {
-                        cout << "기존파일 등록 실패" << endl;
+                        cout << "이미 사용한 단어입니다" << endl;
                         return false; // 이미 사용함
                     }
                 }
                 return true; // 사전에 있고, 중복이 아니며 첫 글자 일치
             }
-            cout << "사전에 존재하지x" << endl;
-            return false; // 사전에 존재하지 않음
         }
-    } else {
-        /*wcout << str3 << endl;
-        wcout << str4 << endl;
-        wcout << str1 << endl;
-        wcout << str2 << endl;
 
-        cout << str1[0] << str[1] << endl;
-        cout << str2[sizeof(str) - 1] << endl;
-        char temp[5] = {
-            0x00,
-        };
-        sprintf(temp, "%c%c%c\n", *str1, *(str1 + 1), *(str1 + 2));
-        cout << temp << endl;*/
+        cout << "사전에 존재하지 않는 단어입니다" << endl;
+        return false; // 사전에 존재하지 않음
+    }
 
+    else {
         cout << temp1 << endl;
         cout << temp2 << endl;
-
+        cout << "끝말잇기가 불가능합니다" << endl;
         return false; // 첫 글자 불일치
     }
 }
 
-void WordGame::comWords() {
+/*void WordGame::comWords() {
     srand(time(NULL));
     int random = rand() % 10000;
     string temp = words[random];
@@ -137,6 +113,42 @@ void WordGame::comWords() {
         before = words[random];
 
     cout << "컴퓨터: " << before << endl;
+}*/
+
+string WordGame::comWords(string str) {
+    const char *str1 = str.c_str();
+
+    char temp1[3] = {
+        0x00,
+    };
+
+    char temp2[3] = {
+        0x00,
+    };
+    sprintf(temp2, "%c%c%c\n", *(str1 + strlen(str1) - 3),
+            *(str1 + strlen(str1) - 2), *(str1 + strlen(str1) - 1));
+
+    vector<string> temp;
+
+    for (iter = words.begin(); iter != words.end(); iter++) {
+        const char *str2 = (*iter).c_str();
+        sprintf(temp1, "%c%c%c\n", *str2, *(str2 + 1), *(str2 + 2));
+        if (strcmp(temp1, temp2) == 0) {
+            temp.push_back(*iter);
+        }
+    }
+    srand(time(NULL));
+    int random = rand() % 10000;
+    cout << "컴퓨터: " << temp[random] << endl;
+    return temp[random];
+
+    /* srand(time(NULL));
+     int random = rand() % 10000;
+     string temp = words[random];
+     if (checkWords(temp))
+         before = words[random];
+
+     cout << "컴퓨터: " << before << endl;*/
 }
 
 int main() {
