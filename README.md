@@ -13,3 +13,6 @@
 3. 터미널에 apt-get install libncurses5-dev libncursesw5-dev 를 입력해 관련 라이브러리를 설치합니다.
 
 4. 빌드할 때, -lncurses 옵션을 붙여야 합니다.
+
+change.cpp 파일 빌드 방법
+g++ -std+c++11 change.cpp -o change
