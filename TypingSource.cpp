@@ -21,6 +21,7 @@ void longprac_game(string pathname) {
     char cut_text[100][TEXT_SIZE] = {
         '\0',
     };
+    int cut_text_count[100];
     ssize_t rsize = 0; // 읽어온 크기
     int xpoint = 7;
     int ypoint = 6;
@@ -58,6 +59,7 @@ void longprac_game(string pathname) {
         cut_count_col++;
         totalText++;
         if (*iter_read == '\n') {
+            cut_text_count[cut_count_row] = cut_count_col;
             cut_count_row++;
             cut_count_col = 0;
         }
@@ -83,7 +85,8 @@ void longprac_game(string pathname) {
                 cout << write_text[write_count];
                 write_count++;
 
-                if (write_char == '\r' || write_count > 166) {
+                if (write_char == '\r' ||
+                    write_count == cut_text_count[cut_count_row - index] - 1) {
                     index--;
                     ypoint += 8;
                     write_count = 0;
@@ -98,10 +101,13 @@ void longprac_game(string pathname) {
                         float accuracy = (float)(totalText - wrong) / totalText;
                         float typingSpeed = (float)totalText / totalTime;
 
-                        move_cursor(50, 15);
+                        move_cursor(73, 20);
                         cout << "평균 타수 : " << typingSpeed << endl;
+                        move_cursor(73, 21);
                         cout << "틀린 글자 개수 : " << wrong << endl;
+                        move_cursor(73, 22);
                         cout << "걸린 초 : " << totalTime << endl;
+                        move_cursor(73, 23);
                         cout << "\n정확도 : " << accuracy << endl;
                         getchar(); // 아무 버튼이나 누르면 종료
                         return;
@@ -161,7 +167,8 @@ void longprac_game(string pathname) {
                 cout << write_text[write_count];
                 write_count++;
 
-                if (write_char == '\r' || write_count > 166) {
+                if (write_char == '\r' ||
+                    write_count == cut_text_count[cut_count_row - index] - 1) {
                     index--;
                     ypoint += 8;
                     write_count = 0;
@@ -184,10 +191,13 @@ void longprac_game(string pathname) {
                         float accuracy = (float)(totalText - wrong) / totalText;
                         float typingSpeed = (float)totalText / totalTime;
 
-                        move_cursor(50, 15);
+                        move_cursor(73, 20);
                         cout << "평균 타수 : " << typingSpeed << endl;
+                        move_cursor(73, 21);
                         cout << "틀린 글자 개수 : " << wrong << endl;
+                        move_cursor(73, 22);
                         cout << "걸린 초 : " << totalTime << endl;
+                        move_cursor(73, 23);
                         cout << "\n정확도 : " << accuracy << endl;
                         getchar(); // 아무 버튼이나 누르면 종료
                         return;
