@@ -30,6 +30,7 @@ void longprac_game(string pathname) {
     int cut_count_row;
     int cut_count_col;
     int index = 0;
+
     int totalText = 0; // 총 글자수
     int wrong = 0;     // 오타 갯수
 
@@ -65,7 +66,9 @@ void longprac_game(string pathname) {
         }
     }
     index = cut_count_row;
-    clock_t start = clock(); // start Time
+    // clock_t start = clock(); // start Time
+    time_t start = 0, end = 0;
+    time(&start);
     for (int i = 0; i <= cut_count_row; i++) {
         move_cursor(xpoint, ypoint);
         ypoint += 8;
@@ -89,6 +92,7 @@ void longprac_game(string pathname) {
                     write_count == cut_text_count[cut_count_row - index] - 1) {
                     index--;
                     ypoint += 8;
+                    totalText = totalText + write_count;
                     write_count = 0;
                     memset(&write_text, '\0', TEXT_SIZE);
                     if (index <= 0) {
@@ -96,19 +100,16 @@ void longprac_game(string pathname) {
                         refresh();
                         longbackground();
                         close(fd);
-                        clock_t end = clock();
-                        float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
-                        float accuracy = (float)(totalText - wrong) / totalText;
-                        float typingSpeed = (float)totalText / totalTime;
-
+                        time(&end);
+                        float totalTime = end - start;
+                        int min = totalTime / 60;
+                        int sec = totalTime - 60 * min;
+                        float avgtasu = 60 * (totalText / totalTime);
                         move_cursor(73, 20);
-                        cout << "평균 타수 : " << typingSpeed << endl;
+                        cout << "총 걸린 시간 : " << min << "분 " << sec << "초"
+                             << endl;
                         move_cursor(73, 21);
-                        cout << "틀린 글자 개수 : " << wrong << endl;
-                        move_cursor(73, 22);
-                        cout << "걸린 초 : " << totalTime << endl;
-                        move_cursor(73, 23);
-                        cout << "\n정확도 : " << accuracy << endl;
+                        cout << "평균 타수 : " << avgtasu << endl;
                         getchar(); // 아무 버튼이나 누르면 종료
                         return;
                     } else if (ypoint > 44) { // 다음 페이지로
@@ -171,6 +172,7 @@ void longprac_game(string pathname) {
                     write_count == cut_text_count[cut_count_row - index] - 1) {
                     index--;
                     ypoint += 8;
+                    totalText = totalText + write_count;
                     write_count = 0;
                     memset(&write_text, '\0', TEXT_SIZE);
                     if (ypoint > 44) { // 다음 페이지로
@@ -186,19 +188,16 @@ void longprac_game(string pathname) {
                         refresh();
                         longbackground();
                         close(fd);
-                        clock_t end = clock();
-                        float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
-                        float accuracy = (float)(totalText - wrong) / totalText;
-                        float typingSpeed = (float)totalText / totalTime;
-
+                        time(&end);
+                        float totalTime = end - start;
+                        int min = totalTime / 60;
+                        int sec = totalTime - 60 * min;
+                        float avgtasu = 60 * (totalText / totalTime);
                         move_cursor(73, 20);
-                        cout << "평균 타수 : " << typingSpeed << endl;
+                        cout << "총 걸린 시간 : " << min << "분 " << sec << "초"
+                             << endl;
                         move_cursor(73, 21);
-                        cout << "틀린 글자 개수 : " << wrong << endl;
-                        move_cursor(73, 22);
-                        cout << "걸린 초 : " << totalTime << endl;
-                        move_cursor(73, 23);
-                        cout << "\n정확도 : " << accuracy << endl;
+                        cout << "평균 타수 : " << avgtasu << endl;
                         getchar(); // 아무 버튼이나 누르면 종료
                         return;
                     }
