@@ -138,7 +138,7 @@ string WordGame::comWords(string str) {
         }
     }
     srand(time(NULL));
-    int random = rand() % 10000;
+    int random = rand() % 10;
     cout << "컴퓨터: " << temp[random] << endl;
     return temp[random];
 

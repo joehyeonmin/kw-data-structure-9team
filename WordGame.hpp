@@ -34,7 +34,7 @@ class WordGame {
     void playGame();             // 게임 실행
     bool checkWords(string str); // 사전에 있는 단어인지와 중복 여부 확인
     void loadWords();            // 텍스트 파일 단어 저장
-    void comWords();             // 컴퓨터 랜덤 단어 선택
+    string comWords(string str); // 컴퓨터 랜덤 단어 선택
 };
 
 void WordChainUI();   // 끝말잇기 UI 출력 함수
