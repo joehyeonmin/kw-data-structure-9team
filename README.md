@@ -16,4 +16,4 @@
 
 **change.cpp 파일 빌드 방법
 
-g++ -std+c++11 change.cpp -o change
+g++ -std=c++11 change.cpp -o change
