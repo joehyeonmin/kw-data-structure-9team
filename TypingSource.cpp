@@ -32,7 +32,6 @@ void longprac_game(string pathname) {
     int index = 0;
 
     int totalText = 0; // 총 글자수
-    int wrong = 0;     // 오타 갯수
 
     clear();
     refresh();
@@ -66,7 +65,6 @@ void longprac_game(string pathname) {
         }
     }
     index = cut_count_row;
-    // clock_t start = clock(); // start Time
     time_t start = 0, end = 0;
     time(&start);
     for (int i = 0; i <= cut_count_row; i++) {
@@ -123,7 +121,7 @@ void longprac_game(string pathname) {
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
                     write_count--;
-                    wrong--;
+
                     write_text[write_count] = '\0';
                     if (write_count == 0) {
                         continue;
@@ -134,7 +132,6 @@ void longprac_game(string pathname) {
                     write_count--;
                 } else if (write_char !=
                            cut_text[cut_count_row - index][write_count - 1]) {
-                    wrong++; // 오타 갯수
                     move_cursor(xpoint + write_count - 1, ypoint - 4);
                     printf("%c[31m", 27); // 빨간색
                     printf("%c[40m", 27);
@@ -204,7 +201,6 @@ void longprac_game(string pathname) {
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
                     write_count--;
-                    wrong--;
                     write_text[write_count] = '\0';
                     if (write_count == 0) {
                         continue;
@@ -215,7 +211,6 @@ void longprac_game(string pathname) {
                     write_count--;
                 } else if (write_char !=
                            cut_text[cut_count_row - index][write_count - 1]) {
-                    wrong++; // 오타 갯수
                     move_cursor(xpoint + write_count - 1, ypoint - 4);
                     printf("%c[31m", 27); // 빨간색
                     printf("%c[40m", 27);
