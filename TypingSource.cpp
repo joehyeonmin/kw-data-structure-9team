@@ -250,5 +250,17 @@ void longprac_game(string pathname) {
             }
         }
     }
+    /*
+        clock_t end = clock();
+        float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
+        float accuracy = (float)(totalText - wrong) / totalText;
+        float typingSpeed = (float)totalText / totalTime;
+        move_cursor(50, 15);
+        cout << "평균 타수 : " << typingSpeed << endl;
+        cout << "틀린 글자 개수 : " << wrong << endl;
+        cout << "걸린 초 : " << totalTime << endl;
+        cout << "\n정확도 : " << accuracy << endl;
+        getchar(); // 아무 버튼이나 누르면 종료
+    */
     // close(fd);
 }
