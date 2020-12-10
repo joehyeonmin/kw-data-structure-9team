@@ -39,5 +39,8 @@ class WordGame {
 
 void WordChainUI();   // 끝말잇기 UI 출력 함수
 void WordChainGame(); // 끝말잇기 구현 함수
+void InitCurses();    // curses 기초 설정
+void Title();         // 타이틀 출력 함수
+void Information();   // 정보 출력 함수
 
 #endif

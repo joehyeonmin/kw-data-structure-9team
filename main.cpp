@@ -2,6 +2,7 @@
  * 자료구조실습 9조 팀프로젝트
  */
 
+#include "TypingPracticeGame.hpp"
 #include "WordGame.hpp"
 #include <cstdio>
 #include <iostream>
@@ -10,10 +11,6 @@
 
 #define ENTER 10
 #define ESCAPE 27
-
-void InitCurses();  // curses 기초 설정
-void Title();       // 타이틀 출력 함수
-void Information(); // 정보 출력 함수
 
 int flag = 0; // 0: 타이틀, 1: 긴글연습, 2: 끝말잇기, 3: Information
 
@@ -27,6 +24,8 @@ void InitCurses() {
 }
 
 void Title() {
+    clear();
+    refresh();
     WINDOW *w;
     char list[3][20] = {"Typing Practice", "Word Chain Game", "Information"};
     char item[20];
@@ -72,14 +71,16 @@ void Title() {
             case ENTER: // 엔터키
                 if (i == 0) {
                     flag = 1;
-                    // TypingGame();
+                    TypingGame();
                     return;
                 } else if (i == 1) {
                     flag = 2;
                     clear();
                     WordChainUI();
-                } else
+                } else {
+                    flag = 3;
                     Information();
+                }
             }
             wattron(w, COLOR_PAIR(2));
 
@@ -93,7 +94,37 @@ void Title() {
     }
 }
 
-void Information() {}
+void Information() {
+    initscr();
+    WINDOW *info;
+    info = newwin(15, 80, 1, 1);
+    box(info, 0, 0);
+
+    mvwprintw(info, 1, 10, "< Information of This Program >");
+    mvwprintw(info, 3, 2, "Data Structure Team 9");
+    mvwprintw(info, 5, 2, "Language Used: C++");
+    mvwprintw(info, 7, 2, "Typing Practice source: ");
+    mvwprintw(info, 9, 2,
+              "WordChain Words source: https://opendict.korean.go.kr/main");
+    mvwprintw(info, 13, 2, "Press ENTER to return to the title.");
+
+    wrefresh(info);
+
+    int ch;
+
+    while (flag == 3) {
+        while ((ch = wgetch(info))) {
+            switch (ch) {
+            case ENTER:
+                delwin(info);
+                clear();
+                refresh();
+                flag = 0;
+                Title();
+            }
+        }
+    }
+}
 
 int main() {
     InitCurses();

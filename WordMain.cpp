@@ -59,7 +59,7 @@ void WordGame::playGame() {
     }
 
     cout << "Game Over!!" << endl;
-    return;
+    exit(-1);
 }
 
 void WordGame::loadWords() {
@@ -79,12 +79,12 @@ bool WordGame::checkWords(string str) {
     const char *str1 = str.c_str();
     const char *str2 = before.c_str();
 
-    char temp1[3] = {
+    char temp1[5] = {
         0x00,
     };
     sprintf(temp1, "%c%c%c\n", *str1, *(str1 + 1), *(str1 + 2));
 
-    char temp2[3] = {
+    char temp2[5] = {
         0x00,
     };
     sprintf(temp2, "%c%c%c\n", *(str2 + strlen(str2) - 3),
@@ -129,11 +129,11 @@ bool WordGame::checkWords(string str) {
 string WordGame::comWords(string str) {
     const char *str1 = str.c_str();
 
-    char temp1[3] = {
+    char temp1[5] = {
         0x00,
     };
 
-    char temp2[3] = {
+    char temp2[5] = {
         0x00,
     };
     sprintf(temp2, "%c%c%c\n", *(str1 + strlen(str1) - 3),
