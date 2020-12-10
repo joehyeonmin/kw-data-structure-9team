@@ -103,7 +103,9 @@ void Information() {
     mvwprintw(info, 1, 10, "< Information of This Program >");
     mvwprintw(info, 3, 2, "Data Structure Team 9");
     mvwprintw(info, 5, 2, "Language Used: C++");
-    mvwprintw(info, 7, 2, "Typing Practice source: ");
+    mvwprintw(info, 7, 2,
+              "Typing Practice source: "
+              "https://m.cafe.daum.net/kimsrabbit/MFyt?boardType=");
     mvwprintw(info, 9, 2,
               "WordChain Words source: https://opendict.korean.go.kr/main");
     mvwprintw(info, 13, 2, "Press ENTER to return to the title.");
