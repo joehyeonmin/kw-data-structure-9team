@@ -14,10 +14,7 @@
 
 4. 빌드할 때, -lncurses 옵션을 붙여야 합니다.
 
-**change.cpp 파일 빌드 방법
 
-g++ -std=c++11 change.cpp -o change
+****파일 빌드 방법****
 
-**wordchin.cpp 파일 빌드 방법
-
-g++ -std=c++11 WordMain.cpp main.cpp -o change -lncurses
+g++ -std=c++11 WordMain.cpp main.cpp TypingBackground.cpp TypingPracticeGame.cpp TypingSource.cpp -o change -lncurses
