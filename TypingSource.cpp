@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <ctime>
 #include <fcntl.h>
+#include <list>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -30,9 +31,10 @@ void longprac_game(string pathname) {
     int cut_count_row;
     int cut_count_col;
     int index = 0;
+    list<int> wrong_count;
+    int wrong = 0;
 
     int totalText = 0; // 총 글자수
-    int wrong = 0;     // 오타 갯수
 
     clear();
     refresh();
@@ -66,7 +68,6 @@ void longprac_game(string pathname) {
         }
     }
     index = cut_count_row;
-    // clock_t start = clock(); // start Time
     time_t start = 0, end = 0;
     time(&start);
     for (int i = 0; i <= cut_count_row; i++) {
@@ -95,6 +96,8 @@ void longprac_game(string pathname) {
                     totalText = totalText + write_count;
                     write_count = 0;
                     memset(&write_text, '\0', TEXT_SIZE);
+                    wrong += wrong_count.size();
+                    wrong_count.clear();
                     if (index <= 0) {
                         clear();
                         refresh();
@@ -110,6 +113,9 @@ void longprac_game(string pathname) {
                              << endl;
                         move_cursor(73, 21);
                         cout << "평균 타수 : " << avgtasu << endl;
+                        move_cursor(73, 22);
+                        cout << "틀린 글자 개수 : " << wrong << endl;
+
                         getchar(); // 아무 버튼이나 누르면 종료
                         return;
                     } else if (ypoint > 44) { // 다음 페이지로
@@ -123,10 +129,15 @@ void longprac_game(string pathname) {
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
                     write_count--;
-                    wrong--;
+
                     write_text[write_count] = '\0';
                     if (write_count == 0) {
                         continue;
+                    }
+
+                    if (!wrong_count.empty()) {
+                        if (wrong_count.back() == write_count - 1)
+                            wrong_count.pop_back();
                     }
                     move_cursor(xpoint + write_count - 1, ypoint);
                     cout << " ";
@@ -134,7 +145,7 @@ void longprac_game(string pathname) {
                     write_count--;
                 } else if (write_char !=
                            cut_text[cut_count_row - index][write_count - 1]) {
-                    wrong++; // 오타 갯수
+                    wrong_count.push_back(write_count - 1);
                     move_cursor(xpoint + write_count - 1, ypoint - 4);
                     printf("%c[31m", 27); // 빨간색
                     printf("%c[40m", 27);
@@ -175,6 +186,8 @@ void longprac_game(string pathname) {
                     totalText = totalText + write_count;
                     write_count = 0;
                     memset(&write_text, '\0', TEXT_SIZE);
+                    wrong += wrong_count.size();
+                    wrong_count.clear();
                     if (ypoint > 44) { // 다음 페이지로
                         ypoint = 6;
                         clear();
@@ -198,16 +211,22 @@ void longprac_game(string pathname) {
                              << endl;
                         move_cursor(73, 21);
                         cout << "평균 타수 : " << avgtasu << endl;
+                        move_cursor(73, 22);
+                        cout << "틀린 글자 개수 : " << wrong << endl;
+
                         getchar(); // 아무 버튼이나 누르면 종료
                         return;
                     }
                     move_cursor(xpoint, ypoint);
                 } else if (write_char == DEL || write_char == BS) {
                     write_count--;
-                    wrong--;
                     write_text[write_count] = '\0';
                     if (write_count == 0) {
                         continue;
+                    }
+                    if (!wrong_count.empty()) {
+                        if (wrong_count.back() == write_count - 1)
+                            wrong_count.pop_back();
                     }
                     move_cursor(xpoint + write_count - 1, ypoint);
                     cout << " ";
@@ -215,7 +234,7 @@ void longprac_game(string pathname) {
                     write_count--;
                 } else if (write_char !=
                            cut_text[cut_count_row - index][write_count - 1]) {
-                    wrong++; // 오타 갯수
+                    wrong_count.push_back(write_count - 1);
                     move_cursor(xpoint + write_count - 1, ypoint - 4);
                     printf("%c[31m", 27); // 빨간색
                     printf("%c[40m", 27);
@@ -231,13 +250,11 @@ void longprac_game(string pathname) {
             }
         }
     }
-
     /*
         clock_t end = clock();
         float totalTime = (float)(end - start) / CLOCKS_PER_SEC;
         float accuracy = (float)(totalText - wrong) / totalText;
         float typingSpeed = (float)totalText / totalTime;
-
         move_cursor(50, 15);
         cout << "평균 타수 : " << typingSpeed << endl;
         cout << "틀린 글자 개수 : " << wrong << endl;

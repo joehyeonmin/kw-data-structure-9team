@@ -1,8 +1,6 @@
 #include "TypingPracticeGame.hpp"
 
 #define ENTER 10
-#define PageOfLine 6 //페이지 줄 수
-#define MAX_STR_LEN 4000
 
 void TypingGame() {
     WINDOW *typingWindow;
