@@ -27,6 +27,8 @@ void InitCurses() {
 }
 
 void Title() {
+    move_cursor(0, 0);
+    system("clear");
     WINDOW *w;
     char list[3][20] = {"Typing Practice", "Word Chain Game", "Information"};
     char item[20];
@@ -54,7 +56,7 @@ void Title() {
     i = 0;
     noecho();
     keypad(w, TRUE);
-    curs_set(0);
+    // curs_set(0);
 
     while (flag == 0) {
         while ((ch = wgetch(w)) != ESCAPE) { // 'esc'키로 종료
@@ -72,13 +74,19 @@ void Title() {
             case ENTER: // 엔터키
                 if (i == 0) {
                     flag = 1;
-                    TypingGame();
+                    // TypingGame();
                     return;
                 } else if (i == 1) {
+                    werase(w);
+                    delwin(w);
                     flag = 2;
-                    WordChainUI();
-                } else
+                    WordChainGame();
+                } else {
+                    werase(w);
+                    delwin(w);
+                    flag = 3;
                     Information();
+                }
             }
             wattron(w, COLOR_PAIR(2));
 
@@ -92,7 +100,31 @@ void Title() {
     }
 }
 
-void Information() {}
+void Information() {
+    /*int ch;
+    if (flag == 3) {
+        move_cursor(2, 1);
+        cout << "< Information of 'Linux 타자연습 게임' >";
+        move_cursor(2, 3);
+        cout << "자료구조실습 9조";
+        move_cursor(2, 5);
+        cout << "사용 언어: C++";
+        move_cursor(2, 7);
+        cout << "사전 정보: 우리말샘 https://opendict.korean.go.kr/main";
+    }
+    move_cursor(2, 10);
+    printf("엔터키를 누르면 메인 메뉴로 돌아갑니다.");
+    while (flag == 3) {
+        ch = wgetch(stdscr);
+        switch (ch) {
+        case ENTER:
+            system("clear");
+            flag = 0;
+            Title();
+            break;
+        }
+    }*/
+}
 
 int main() {
     InitCurses();

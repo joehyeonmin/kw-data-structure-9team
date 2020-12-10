@@ -68,12 +68,12 @@ bool WordGame::checkWords(string str) {
     const char *str1 = str.c_str();
     const char *str2 = before.c_str();
 
-    char temp1[3] = {
+    char temp1[5] = {
         0x00,
     };
     sprintf(temp1, "%c%c%c\n", *str1, *(str1 + 1), *(str1 + 2));
 
-    char temp2[3] = {
+    char temp2[5] = {
         0x00,
     };
     sprintf(temp2, "%c%c%c\n", *(str2 + strlen(str2) - 3),
@@ -98,8 +98,8 @@ bool WordGame::checkWords(string str) {
     }
 
     else {
-        cout << temp1 << endl;
-        cout << temp2 << endl;
+        // cout << temp1 << endl;
+        // cout << temp2 << endl;
         cout << "끝말잇기가 불가능합니다" << endl;
         return false; // 첫 글자 불일치
     }
@@ -118,11 +118,11 @@ bool WordGame::checkWords(string str) {
 string WordGame::comWords(string str) {
     const char *str1 = str.c_str();
 
-    char temp1[3] = {
+    char temp1[5] = {
         0x00,
     };
 
-    char temp2[3] = {
+    char temp2[5] = {
         0x00,
     };
     sprintf(temp2, "%c%c%c\n", *(str1 + strlen(str1) - 3),
