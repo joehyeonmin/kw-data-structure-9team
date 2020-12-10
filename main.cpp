@@ -39,6 +39,9 @@ void Title() {
         w, 1, 3,
         "Typing Practice in Linux"); // mvwprintw(화면, y좌표, x좌표, 내용)
 
+    mvwprintw(w, 3, 2, "( Press Esc to");
+    mvwprintw(w, 4, 4, "exit the program )");
+
     for (i = 0; i < 3; i++) {
         if (i == 0)
             wattron(w, COLOR_PAIR(2)); // Highlight the line
